@@ -2,7 +2,7 @@
 
 set -e
 
-PROJECT_DIR = "/home/jkkb/LoRaCam"
+PROJECT_DIR="/home/jkkb/LoRaCam"
 cd $PROJECT_DIR
 
 echo "LoRaCam自動更新スクリプトへようこそ"

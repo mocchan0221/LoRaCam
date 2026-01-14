@@ -1,0 +1,13 @@
+[Unit]
+Description=Web Monitor via HTTP Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python 3 -m http.server 8000 --directory /home/jkkb/LoRaCam
+
+User=jkkb
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
