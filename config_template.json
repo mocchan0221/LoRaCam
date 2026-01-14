@@ -1,0 +1,19 @@
+{
+    "LoRa": {
+        "DEVEUI":"0000000000000000",
+        "APPKEY":"00000000000000000000000000000000"
+    },
+    "Camera":{
+        "sensor":"imx708",
+        "focus":0.0
+    },
+    "Network": {
+        "wifi_enabled": false,
+        "ssid": "SSID",
+        "password": "PASS"
+    },
+    "Detection":{
+        "Interval": 60,
+        "CONF_THRESHOLD":0.5
+    }
+}

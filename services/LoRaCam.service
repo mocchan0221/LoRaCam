@@ -1,0 +1,14 @@
+[Unit]
+Description=YOLO Person Counter via LoRa
+After=network.target
+
+[Service]
+ExecStart=/home/jkkb/LoRaCam/.venv/bin/python /home/jkkb/LoRaCam/main.py
+WorkingDirectory=/home/jkkb/LoRaCam
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
