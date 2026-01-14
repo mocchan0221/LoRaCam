@@ -2,7 +2,7 @@ import time
 import datetime
 import cv2
 import os
-from app import load_config
+from app.config_loader import load_config
 from app import Camera, YoloDetector, LoggerHandler
 
 MODEL_PATH = "models/yolov8n_full_integer_quant.tflite"
