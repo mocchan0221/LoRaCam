@@ -9,3 +9,7 @@ AI camera via LoRa on Raspberry Pi
 
 ## sevices
 サービス登録用
+
+# Setup
+
+Python -m venv --system-site-packages .venv
