@@ -56,7 +56,6 @@ def main():
 
     try:
         while True:
-            start_time = time.time()
             now_dt = datetime.datetime.now()
 
             # 撮影・検出・保存
