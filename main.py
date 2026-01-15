@@ -30,7 +30,7 @@ def main():
     print(f" - APP_KEY: {APP_KEY}")
 
     # ディレクトリ作成
-    save_image_dir = "images"
+    save_image_dir = "data/images"
     os.makedirs(save_image_dir, exist_ok=True)
 
     # クラス初期化
