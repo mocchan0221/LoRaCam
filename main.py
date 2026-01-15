@@ -71,7 +71,7 @@ def main():
             
             #LoRa送信
             print("Sending data via LoRa")
-            if lora.send_data(person_count):
+            if lora.send_data(str(person_count)):
                 print("Result: Sent Command Accepted")
                 # 送信直後に自動で受信チェックも行うと便利
                 print("Checking for response...")
