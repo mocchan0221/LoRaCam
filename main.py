@@ -29,6 +29,10 @@ def main():
     print(f" - APP_EUI: {APP_EUI}")
     print(f" - APP_KEY: {APP_KEY}")
 
+    # ディレクトリ作成
+    save_image_dir = "images"
+    os.makedirs(save_image_dir, exist_ok=True)
+
     # クラス初期化
     camera = Camera(width=1280, height=720, focus_val=camera_focus)
     detector = YoloDetector(model_path=MODEL_PATH, conf_threshold=detect_conf)
