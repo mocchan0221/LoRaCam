@@ -13,6 +13,12 @@ data/logs/*
 !data/images/.gitkeep
 !data/logs/.gitkeep
 
+# pcb
+pcb/*cache
+pcb/*backups/
+pcb/production/
+pcb/fabrication*
+
 # config
 config.json
 
