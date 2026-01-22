@@ -2,14 +2,15 @@
     "LoRa": {
         "DEVEUI":"0000000000000000",
         "APPEUI":"0000000000000000",
-        "APPKEY":"00000000000000000000000000000000"
+        "APPKEY":"00000000000000000000000000000000",
+        "IsJoined":0
     },
     "Camera":{
         "sensor":"imx708",
         "focus":0.0
     },
     "Network": {
-        "wifi_enabled": false,
+        "wifi_enabled": 0,
         "ssid": "SSID",
         "password": "PASS"
     },

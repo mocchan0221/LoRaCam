@@ -24,6 +24,7 @@ def main():
     DEV_EUI = config.get("LoRa",{}).get("DEVEUI","0000000000000000")
     APP_EUI = config.get("LoRa",{}).get("APPEUI","0000000000000000")
     APP_KEY = config.get("LoRa",{}).get("APPKEY","00000000000000000000000000000000")
+    IS_JOINED = config.get("LoRa",{}).get("IsJoined",0)
 
     print(f" - DEV_EUI: {DEV_EUI}")
     print(f" - APP_EUI: {APP_EUI}")
@@ -39,21 +40,22 @@ def main():
     logger = LoggerHandler(log_dir="data/logs")
 
     # LoRa joinプロセス
-    print("Start LoRa connection process!")
-    print("opening serial port...")
-    try:
-        lora = LoRaCommunicator(port='/dev/ttyS0')
-        print("Serial port opened successfully.")
-    except Exception as e:
-        print(f"Failed to open serial port: {e}")
-        sys.exit(1)
-    
-    print(f"Joining with DevEUI: {DEV_EUI} ...")
-    if lora.connect_network(DEV_EUI, APP_EUI, APP_KEY):
-        print("Result: Success!")
-    else:
-        print("Result: Failed.")
-        sys.exit(1)
+    if IS_JOINED:
+        print("Start LoRa connection process!")
+        print("opening serial port...")
+        try:
+            lora = LoRaCommunicator(port='/dev/ttyS0')
+            print("Serial port opened successfully.")
+        except Exception as e:
+            print(f"Failed to open serial port: {e}")
+            sys.exit(1)
+        
+        print(f"Joining with DevEUI: {DEV_EUI} ...")
+        if lora.connect_network(DEV_EUI, APP_EUI, APP_KEY):
+            print("Result: Success!")
+        else:
+            print("Result: Failed.")
+            sys.exit(1)
 
 
     print("Start monitoring loop...")
