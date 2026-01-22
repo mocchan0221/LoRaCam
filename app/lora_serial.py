@@ -40,11 +40,11 @@ class LoRaCommunicator:
                 
         return response
 
-    def connect_network(self, dev_eui, app_eui, app_key, region=2):
+    def connect_network(self, dev_eui, app_eui, app_key, region=3):
         """
         LoRaWANネットワークへの接続 (Join) を行う
         設定: Class A, OTAA
-        :param region: 2 = AS923-1-JP (日本) 
+        :param region: 3 = AS923-1-JP (日本) 
         """
         print("--- Configuring LoRa Module ---")
         
