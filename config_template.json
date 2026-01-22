@@ -6,13 +6,14 @@
         "IsJoined":0
     },
     "Camera":{
-        "sensor":"imx708",
-        "focus":0.0
+        "Sensor":"imx708",
+        "Focus":0.0
     },
     "Network": {
         "wifi_enabled": 0,
-        "ssid": "SSID",
-        "password": "PASS"
+        "SSID": "SSID",
+        "PASSWORD": "PASS",
+        "HostName":"jkkb.local"
     },
     "Detection":{
         "Interval": 60,

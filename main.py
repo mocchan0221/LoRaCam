@@ -13,7 +13,7 @@ def main():
 
     # 設定の読み込み
     config = load_config()
-    camera_focus = config.get("Camera", {}).get("focus",0.0)
+    camera_focus = config.get("Camera", {}).get("Focus",0.0)
     detect_conf = config.get("Detection",{}).get("CONF_THRESHOLD",0.4)
     interval = config.get("Detection",{}).get("Interval",5)
     print("Loaded Configuration:")
