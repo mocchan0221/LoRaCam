@@ -78,7 +78,7 @@ class LoRaCommunicator:
         for _ in range(max_retries):
             resp = self._send_at("AT+DULSTAT?", wait_time=1)
             for line in resp:
-                if "+DULSTAT:04" in line:
+                if "+DULSTAT:04" in line or "+DULSTAT:03" in line:
                     print(">>> Network Joined Successfully! <<<")
                     return True
                 if "+DULSTAT:05" in line:
