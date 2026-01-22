@@ -13,7 +13,8 @@
         "wifi_enabled": 0,
         "SSID": "SSID",
         "PASSWORD": "PASS",
-        "HostName":"jkkb.local"
+        "HostName":"jkkb.local",
+        "IsLatest": 1
     },
     "Detection":{
         "Interval": 60,

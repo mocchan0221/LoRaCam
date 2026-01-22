@@ -3,36 +3,66 @@ import datetime
 import cv2
 import os
 import sys
-from app.config_loader import load_config
-from app import Camera, YoloDetector, LoggerHandler, LoRaCommunicator
+from app import Camera, YoloDetector, LoggerHandler, LoRaCommunicator,ConfigManager, SystemInitializer
 
 MODEL_PATH = "models/yolov8n_full_integer_quant.tflite"
 
 def main():
-    print("YOLO Person detection system activated...")
+    print("YOLO Person detection system activated!")
 
     # 設定の読み込み
-    config = load_config()
+    print("Config Loading...")
+    config_mgr = ConfigManager()
+    config = config_mgr.load()
+
+    if config == None:
+        print("Error: Could not load any configuration.")
+        sys.exit(1)
+
+    # ネットワーク設定の抽出
+    is_latest = config.get("Network",{}).get("IsLatest",1)
+    ssid = config.get("Network",{}).get("SSID","SSID")
+    password = config.get("Network",{}).get("PASSWORD","PASS")
+    hostname = config.get("Network",{}).get("HostName","jkkb.local")
+    wifi_enabled = config.get("Network",{}).get("wifi_enabled",0)
+
+    # ネットワーク設定
+    if is_latest:
+        print("All system setting is latest!")
+    else:
+        print("New System setting is detected:")
+        initializer = SystemInitializer(ssid=ssid, password=password, hostname=hostname,wifi_enabled=wifi_enabled)
+        if initializer.execute_all():
+            print("New Configuration is successfully applied!")
+
+            if config_mgr.update_status(1):
+                print("Status updated. Rebooting system in 3 seconds...")
+                time.sleep(5)
+                initializer.reboot()
+            else:
+                print("Failed to update config file.")
+                sys.exit(1)
+        else:
+            print("Errors occurred during system configuration.")
+
+    # カメラ部分の抽出
     camera_focus = config.get("Camera", {}).get("Focus",0.0)
     detect_conf = config.get("Detection",{}).get("CONF_THRESHOLD",0.4)
     interval = config.get("Detection",{}).get("Interval",5)
-    print("Loaded Configuration:")
+    print("Loaded Detection Configuration:")
     print(f" - Focus: {camera_focus}")
     print(f" - Conf Threshold: {detect_conf}")
     print(f" - Interval: {interval} sec")
 
+    # LoRa部分の抽出
     DEV_EUI = config.get("LoRa",{}).get("DEVEUI","0000000000000000")
     APP_EUI = config.get("LoRa",{}).get("APPEUI","0000000000000000")
     APP_KEY = config.get("LoRa",{}).get("APPKEY","00000000000000000000000000000000")
     IS_JOINED = config.get("LoRa",{}).get("IsJoined",0)
-
+    print("Loaded LoRa Configuration:")
     print(f" - DEV_EUI: {DEV_EUI}")
     print(f" - APP_EUI: {APP_EUI}")
-    print(f" - APP_KEY: {APP_KEY}")
-
-    # ディレクトリ作成
-    save_image_dir = "data/images"
-    os.makedirs(save_image_dir, exist_ok=True)
+    print(f" - APP_KEY: {APP_KEY}")    
 
     # クラス初期化
     camera = Camera(width=1280, height=720, focus_val=camera_focus)
@@ -40,7 +70,6 @@ def main():
     logger = LoggerHandler(log_dir="data/logs")
 
     # LoRa joinプロセス
-    
     print("Start LoRa connection process!")
     print("opening serial port...")
     try:

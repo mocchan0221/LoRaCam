@@ -1,32 +1,50 @@
-# 設定ファイルの読み込みプログラム
-
 import json
 import os
+import sys
 
-CONFIG_PATHS = [
-    "/boot/firmware/config.json",
-    "/boot/config.json"
-]
+class ConfigManager:
+    CONFIG_PATH = "/boot/firmware/config.json"
 
-DEFAULT_CONFIG_PATH = "/home/jkkb/LoRaCam/config_template.json"            
+    def __init__(self):
+        self.config_data = {}
 
-def load_config():
-    print("Config Loading...")
-    # 設定ファイルの存在を確認
-    config_path = None
-    for path in CONFIG_PATHS:
-        if os.path.exists(path):
-            print("Config file found !")
-            config_path = path
-            break
+    def load(self):
+        try:
+            if os.path.exists(self.CONFIG_PATH):
+                print(f"Config file found at: {self.CONFIG_PATH}")
+                with open(self.CONFIG_PATH, 'r') as f:
+                    self.config_data = json.load(f)
+                    print("Config file correctly Loaded !")
+            else:
+                print(f"Config not found.")
+                return None
+        
+        except Exception as e:
+            print(f"[Error] Failed to load config: {e}")
+            return None
 
-    try:
-        with open(config_path, 'r') as f:
-            config = json.load(f)
-            print("Config file correctly Loaded !")
-            return config
-    except Exception as e:
-        with open(DEFAULT_CONFIG_PATH, 'r') as f:
-            config = json.load(f)
-            print("Failed to load config, using default")
-            return config
+        return self.config_data
+
+    def save(self):
+        print(f"Saving config to: {self.CONFIG_PATH}")
+        try:
+
+            with open(self.CONFIG_PATH, 'w') as f:
+                json.dump(self.config_data, f, indent=2)
+                f.flush()
+                os.fsync(f.fileno())
+            
+            print("Config saved successfully.")
+            return True
+        except Exception as e:
+            print(f"[Error] Failed to save config: {e}")
+            return False
+
+    def get(self, key, default=None):
+        """設定値を取得するヘルパー"""
+        return self.config_data.get(key, default)
+
+    def update_status(self, is_latest_value: int):
+        """is_latest フラグを更新して保存するショートカット"""
+        self.config_data["is_latest"] = is_latest_value
+        return self.save()
