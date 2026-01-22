@@ -40,16 +40,19 @@ def main():
     logger = LoggerHandler(log_dir="data/logs")
 
     # LoRa joinプロセス
+    
+    print("Start LoRa connection process!")
+    print("opening serial port...")
+    try:
+        lora = LoRaCommunicator(port='/dev/ttyS0')
+        print("Serial port opened successfully.")
+    except Exception as e:
+        print(f"Failed to open serial port: {e}")
+        sys.exit(1)
+
     if IS_JOINED:
-        print("Start LoRa connection process!")
-        print("opening serial port...")
-        try:
-            lora = LoRaCommunicator(port='/dev/ttyS0')
-            print("Serial port opened successfully.")
-        except Exception as e:
-            print(f"Failed to open serial port: {e}")
-            sys.exit(1)
-        
+        print("Already joined! Skip join process...")
+    else:
         print(f"Joining with DevEUI: {DEV_EUI} ...")
         if lora.connect_network(DEV_EUI, APP_EUI, APP_KEY):
             print("Result: Success!")
