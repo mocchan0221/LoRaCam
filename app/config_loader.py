@@ -47,5 +47,6 @@ class ConfigManager:
 
     def update_status(self, is_latest_value: int):
         """is_latest フラグを更新して保存するショートカット"""
-        self.config_data.Network.IsLatest = is_latest_value
+
+        self.config_data["Network"]["IsLatest"] = is_latest_value
         return self.save()
