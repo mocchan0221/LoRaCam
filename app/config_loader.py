@@ -50,7 +50,10 @@ class ConfigManager:
         return self.save()
     
     def set_nested(data, path, value, delimiter='.'):
+        if not isinstance(path,str):
+            raise TypeError(f"path must be str now its {type(path)}")
         keys = path.split(delimiter)
+        
         current = data
         for key in keys[:-1]:
             current = current.setdefault(key,{})
