@@ -6,7 +6,7 @@ class SystemInitializer:
     def __init__(self, ssid: str, password: str, hostname: str, wifi_enabled: int):
         self.ssid = ssid
         self.password = password
-        self.hostname = hostname
+        self.hostname = hostname.strip()
         self.wifi_enabled = wifi_enabled
 
     def _run_command(self, command: list) -> bool:
@@ -50,30 +50,49 @@ class SystemInitializer:
 
     def configure_hostname(self) -> bool:
         print(f"[*] Setting hostname to: {self.hostname}...")
-        if not self._run_command(["hostnamectl", "set-hostname", self.hostname]):
-            return False
+        current_hostname = os.uname().nodename
+        if current_hostname == self.hostname:
+            print("Hostname is already set. Skippping")
+            return True
         
         hosts_path = "/etc/hosts"
         try:
             with open(hosts_path, 'r') as f:
                 lines = f.readlines()
-            with open(hosts_path, 'w') as f:
+                new_lines = []
+                replaced = False
                 for line in lines:
                     if line.strip().startswith("127.0.1.1"):
-                        f.write(f"127.0.1.1\t{self.hostname}\n")
+                        new_lines.append(f"127.0.1.1\t{self.hostname}\n")
+                        replaced = True
                     else:
-                        f.write(line)
-            return True
+                        new_lines.append(line)
+                if not replaced:
+                    new_lines.append(f"127.0.1.1\t{self.hostname}\n")
+            
+            with open(hosts_path, 'w') as f:
+                f.writelines(new_lines)
+            os.sync()
+            print("/etc/hosts/ updated.")
+        
         except Exception as e:
-            print(f"[Error] /etc/hosts update failed: {e}")
+            print(f"Error Failed to write /etc/hosts: {e}")
             return False
 
-    def execute_all(self) -> bool:
-        wifi_result = self.configure_wifi()
-        hostname_result = self.configure_hostname()
+        print("Restarting avahi-daemon to apply .local name...")
+        self._run_command(["systemctl","restart","avahi-daemon"])
+        return True
 
-        return wifi_result and hostname_result
+    def execute_all(self) -> bool:
+        if os.geteuid() != 0:
+            print("Error Root privileges required")
+            return False
+        host_res = self.configure_hostname()
+        wifi_res = self.configure_wifi()
+
+        return wifi_res and host_res
 
     def reboot(self):
         print("[*] Rebooting system...")
+        time.sleep(1)
         subprocess.run(["reboot"])
