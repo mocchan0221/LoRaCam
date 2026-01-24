@@ -78,6 +78,10 @@ class SystemInitializer:
         except Exception as e:
             print(f"Error Failed to write /etc/hosts: {e}")
             return False
+        
+        if not self._run_command(["hostnamectl", "set-hostname", self.hostname]):
+            print("Error hostnamectl failed.")
+            return False
 
         print("Restarting avahi-daemon to apply .local name...")
         self._run_command(["systemctl","restart","avahi-daemon"])

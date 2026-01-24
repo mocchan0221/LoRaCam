@@ -46,5 +46,12 @@ class ConfigManager:
 
     def update_status(self, is_latest_value: int):
         """is_latest フラグを更新して保存するショートカット"""
-        self.config_data["is_latest"] = is_latest_value
+        self.set_nested(self.config_data, "Network.IsLatest", is_latest_value)
         return self.save()
+    
+    def set_nested(data, path, value, delimiter='.'):
+        keys = path.split(delimiter)
+        current = data
+        for key in keys[:-1]:
+            current = current.setdefault(key,{})
+        current[keys[-1]] = value
