@@ -42,11 +42,14 @@ class ConfigManager:
             return False
 
     def get(self, key, default=None):
-        """設定値を取得するヘルパー"""
         return self.config_data.get(key, default)
 
     def update_status(self, is_latest_value: int):
-        """is_latest フラグを更新して保存するショートカット"""
 
         self.config_data["Network"]["IsLatest"] = is_latest_value
+        return self.save()
+    
+    def update_lora_join_status(self, is_joined: int):
+
+        self.config_data["LoRa"]["IsJoined"] = is_joined
         return self.save()

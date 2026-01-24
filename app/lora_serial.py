@@ -136,6 +136,20 @@ class LoRaCommunicator:
                 except Exception as e:
                     print(f"Parse Error: {e}")
         return None
+    
+    def get_lora_status_summary(self):
+        """
+        現在のモジュールの状態を総合的に判断する
+        """
+        resp = self._send_at("AT+DULSTAT?", wait_time=0.5)
+        for line in resp:
+            if "+DULSTAT=" in line:
+                status = int(line.split("=")[1])
+                if status in [3, 4, 7, 8]:
+                    return "CONNECTED"
+                if status == 5:
+                    return "JOIN_FAILED"
+        return "IDLE_OR_UNKNOWN"
 
     def close(self):
         self.ser.close()
