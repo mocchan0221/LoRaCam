@@ -1,5 +1,4 @@
-from app import LoRaCommunicator
-from app.config_loader import load_config
+from app import LoRaCommunicator,ConfigManager
 import time
 import sys
 
@@ -16,7 +15,8 @@ def print_help():
 
 def main():
     print("welcome to LoRa test program!")
-    config = load_config()
+    config_mgr = ConfigManager()
+    config = config_mgr.load()
 
     DEV_EUI = config.get("LoRa",{}).get("DEVEUI","0000000000000000")
     APP_EUI = config.get("LoRa",{}).get("APPEUI","0000000000000000")
