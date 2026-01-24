@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+from box import Box
 
 class ConfigManager:
     CONFIG_PATH = "/boot/firmware/config.json"
@@ -46,15 +47,5 @@ class ConfigManager:
 
     def update_status(self, is_latest_value: int):
         """is_latest フラグを更新して保存するショートカット"""
-        self.set_nested(self.config_data, "Network.IsLatest", is_latest_value)
+        self.config_data.Network.IsLatest = is_latest_value
         return self.save()
-    
-    def set_nested(data, path, value, delimiter='.'):
-        if not isinstance(path,str):
-            raise TypeError(f"path must be str now its {type(path)}")
-        keys = path.split(delimiter)
-        
-        current = data
-        for key in keys[:-1]:
-            current = current.setdefault(key,{})
-        current[keys[-1]] = value
