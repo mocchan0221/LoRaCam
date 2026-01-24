@@ -107,22 +107,27 @@ def main():
             cv2.imwrite(save_path, result_img)
             print(f"[{now_str}] Count(Person): {person_count} | Saved.")
             
-            #LoRa送信
             print("Sending data via LoRa")
-            if lora.send_data(now_str+" "+str(person_count)):
+            send_payload = now_str + " " + str(person_count) 
+            
+            if lora.send_data(send_payload):
                 print("Result: Sent Command Accepted")
-                # 送信直後に自動で受信チェックも行うと便利
+                logger.save_lora(now_dt, "SEND", send_payload, "Success")
+
                 print("Checking for response...")
-                # Class Aの受信ウィンドウ待ち (少し待ってから確認)
                 import time
                 time.sleep(2)
+                
+                # 受信処理
                 data = lora.receive_data()
                 if data:
                     print(f"Received: {data}")
+                    logger.save_lora(datetime.datetime.now(), "RECV", data, "Success")
                 else:
                     print("No data received.")
             else:
                 print("Result: Send Failed")
+                logger.save_lora(now_dt, "SEND", send_payload, "Failed")
 
             # 指定秒数待機
             time.sleep(interval)
