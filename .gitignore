@@ -26,5 +26,5 @@ config.json
 .DS_Store
 Thumbs.db
 
-# AI log
-AILog/
+# Dev log (AI logs, slides)
+DevLog/
