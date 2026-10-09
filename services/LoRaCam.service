@@ -3,11 +3,21 @@ Description=YOLO Person Counter via LoRa
 After=network.target
 
 [Service]
+# main.py が初期化完了時に READY=1、動作中に WATCHDOG=1 を通知する
+Type=notify
 ExecStart=/home/jkkb/LoRaCam/.venv/bin/python /home/jkkb/LoRaCam/main.py
+# 異常終了時に赤LEDを点灯
+ExecStopPost=/home/jkkb/LoRaCam/scripts/led_error.sh
 WorkingDirectory=/home/jkkb/LoRaCam
 StandardOutput=inherit
 StandardError=inherit
+# 初期化 (カメラ・モデル読込・LoRa Join) の上限時間
+TimeoutStartSec=300
+# この時間 WATCHDOG=1 が来なければフリーズとみなして再起動
+WatchdogSec=120
 Restart=always
+# 赤LEDを確認できるよう再起動まで少し待つ
+RestartSec=10
 User=root
 
 [Install]

@@ -73,6 +73,17 @@ LoRaTest を使う前に `sudo systemctl stop LoRaCam.service` でシリアル�
 - WebMonitor により `http://<ホスト名>.local:8000/data/` から閲覧可能
 - LoRa 送信ペイロード: `"YYYY-mm-dd HH:MM:SS <人数>"` の ASCII 文字列
 
+### ステータスLED
+| 緑 (GPIO17) | 赤 (GPIO27) | 状態 |
+| --- | --- | --- |
+| 点滅 | 消灯 | 初期化中 (設定読込・カメラ・LoRa Join) |
+| 点灯 | 消灯 | 正常動作中 |
+| 消灯 | 点灯 | 異常終了 (エラー終了・クラッシュ・120秒応答なし)。10秒後に自動再起動 |
+| 点滅 | 点灯 | 異常終了後の再起動中。正常動作に入ると赤は消える |
+| 消灯 | 消灯 | サービス停止中 |
+
+赤点灯の原因は `journalctl -u LoRaCam.service` と `/run/loracam-error` で確認できる。
+
 ## 開発フロー
 PC で編集して push → 開発機で `bash scripts/dev_update.sh` (sudo は付けない)。pull・サービス更新・再起動を一括で行い、pip は requirements.txt が変わったときだけ実行 (`--force-pip` で強制)。
 

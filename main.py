@@ -3,12 +3,23 @@ import datetime
 import cv2
 import os
 import sys
-from app import Camera, YoloDetector, LoggerHandler, LoRaCommunicator,ConfigManager, SystemInitializer
+from app import Camera, YoloDetector, LoggerHandler, LoRaCommunicator,ConfigManager, SystemInitializer, StatusLED, notify
 
 MODEL_PATH = "models/yolov8n_full_integer_quant.tflite"
 
+def wait(seconds):
+    """待機中も systemd の watchdog に生存を通知する"""
+    end = time.monotonic() + seconds
+    while (remaining := end - time.monotonic()) > 0:
+        notify("WATCHDOG=1")
+        time.sleep(min(remaining, 10))
+
 def main():
     print("YOLO Person detection system activated!")
+
+    # 初期化中は緑LED点滅
+    led = StatusLED()
+    led.initializing()
 
     # 設定の読み込み
     print("Config Loading...")
@@ -92,8 +103,13 @@ def main():
 
     print("Start monitoring loop...")
 
+    # 初期化完了: 緑LED点灯、systemd に起動完了を通知 (以降 watchdog 監視開始)
+    led.running()
+    notify("READY=1")
+
     try:
         while True:
+            notify("WATCHDOG=1")
             now_dt = datetime.datetime.now()
 
             # 撮影・検出・保存
@@ -129,12 +145,13 @@ def main():
                 logger.save_lora(now_dt, "SEND", send_payload, "Failed")
 
             # 指定秒数待機
-            time.sleep(interval)
+            wait(interval)
 
     except KeyboardInterrupt:
         print("\nStopped.")
     finally:
         camera.stop()
+        led.close()
 
 if __name__ == "__main__":
     main()
