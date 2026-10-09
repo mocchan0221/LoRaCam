@@ -6,7 +6,7 @@ class SystemInitializer:
     def __init__(self, ssid: str, password: str, hostname: str, wifi_enabled: int):
         self.ssid = ssid
         self.password = password
-        self.hostname = hostname.strip()
+        self.hostname = hostname.strip().removesuffix(".local")  # avahi が ".local" を付けるため除去
         self.wifi_enabled = wifi_enabled
 
     def _run_command(self, command: list) -> bool:

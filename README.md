@@ -54,7 +54,7 @@ Raspberry Pi + カメラで YOLOv8n (TFLite) による人数カウントを行�
 | `LoRa.IsJoined` | 1 なら起動時の Join をスキップ |
 | `Camera.Focus` | マニュアルフォーカス値 (LensPosition, 0.0 = 無限遠) |
 | `Network.wifi_enabled` | 0: Wi-Fi OFF / 1: Wi-Fi ON (`SSID`, `PASSWORD` に接続) |
-| `Network.HostName` | ホスト名 |
+| `Network.HostName` | ホスト名 (`.local` は付けない。例: `jkkb1` → `jkkb1.local` でアクセス) |
 | `Network.IsLatest` | 0 にすると次回起動時に Wi-Fi・ホスト名を適用し、1 に書き換えて再起動 |
 | `Detection.Interval` | 検出・送信の間隔 [秒] |
 | `Detection.CONF_THRESHOLD` | 検出の信頼度しきい値 |

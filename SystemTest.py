@@ -19,7 +19,7 @@ def main():
     is_latest = config.get("Network",{}).get("IsLatest",1)
     ssid = config.get("Network",{}).get("SSID","SSID")
     password = config.get("Network",{}).get("PASSWORD","PASS")
-    hostname = config.get("Network",{}).get("HostName","jkkb.local")
+    hostname = config.get("Network",{}).get("HostName","jkkb")
     wifi_enabled = config.get("Network",{}).get("wifi_enabled",0)
 
     print("Configuration is loaded:")
