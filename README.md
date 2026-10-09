@@ -74,7 +74,7 @@ LoRaTest を使う前に `sudo systemctl stop LoRaCam.service` でシリアル�
 - LoRa 送信ペイロード: `"YYYY-mm-dd HH:MM:SS <人数>"` の ASCII 文字列
 
 ## 開発フロー
-PC で編集して push → 開発機で `bash scripts/dev_update.sh` (pull・pip 更新・サービス更新・再起動を一括実行)。
+PC で編集して push → 開発機で `bash scripts/dev_update.sh` (sudo は付けない)。pull・サービス更新・再起動を一括で行い、pip は requirements.txt が変わったときだけ実行 (`--force-pip` で強制)。
 
 ## デバイスの複製
 1. 開発機の SD カードを Win32 Disk Imager でイメージ化 (必要なら WSL2/Linux の pishrink で圧縮)
