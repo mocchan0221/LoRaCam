@@ -1,7 +1,6 @@
 import json
 import os
 import sys
-from box import Box
 
 class ConfigManager:
     CONFIG_PATH = "/boot/firmware/config.json"

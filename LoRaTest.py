@@ -78,7 +78,6 @@ def main():
                     # 送信直後に自動で受信チェックも行うと便利
                     print("Checking for response...")
                     # Class Aの受信ウィンドウ待ち (少し待ってから確認)
-                    import time
                     time.sleep(2)
                     data = lora.receive_data()
                     if data:

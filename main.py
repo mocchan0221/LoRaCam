@@ -115,7 +115,6 @@ def main():
                 logger.save_lora(now_dt, "SEND", send_payload, "Success")
 
                 print("Checking for response...")
-                import time
                 time.sleep(2)
                 
                 # 受信処理
